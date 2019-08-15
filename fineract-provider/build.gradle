@@ -539,3 +539,52 @@ springBoot {
 bootRepackage {
     mainClass = 'org.apache.fineract.ServerWithMariaDB4jApplication'
 }
+// This is to save json file at build time
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "io.swagger.core.v3:swagger-gradle-plugin:2.0.8"
+    }
+}
+
+apply plugin: "io.swagger.core.v3.swagger-gradle-plugin"
+
+resolve {
+    outputFileName = 'fineractAPI'
+    outputFormat = 'JSON'
+    prettyPrint = 'TRUE'
+    classpath = sourceSets.main.runtimeClasspath
+    resourcePackages = ['org.apache.fineract']
+    outputPath = '/src/main/resources/'
+}
+// This is to generate swagger-ui
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.org.hidetake:gradle-swagger-generator-plugin:2.18.1"
+    }
+}
+
+apply plugin: "org.hidetake.swagger.generator"
+
+dependencies {
+    swaggerUI 'org.webjars:swagger-ui:3.10.0'
+}
+
+swaggerSources {
+    fineract {
+        inputFile = file('petstore.yaml')
+    }
+}
+
+
