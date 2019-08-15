@@ -35,6 +35,8 @@ buildscript {
      classpath 'org.apache.openjpa:openjpa-all:2.4.1'
      classpath 'at.schmutterer.oss.gradle:gradle-openjpa:0.2.0'
      classpath 'gradle.plugin.org.nosphere.apache:creadur-rat-gradle:0.2.2'
+      classpath "io.swagger.core.v3:swagger-gradle-plugin:2.0.8"
+      classpath "gradle.plugin.org.hidetake:gradle-swagger-generator-plugin:2.18.1"
   }
 }
 
@@ -48,6 +50,8 @@ apply plugin: 'idea'
 apply plugin: 'tomcat'
 apply plugin: 'project-report'
 apply plugin: 'java'
+apply plugin: "io.swagger.core.v3.swagger-gradle-plugin"
+apply plugin: "org.hidetake.swagger.generator"
 apply plugin: 'openjpa'
 apply plugin: 'pmd'
 apply plugin: 'findbugs'
@@ -540,20 +544,6 @@ bootRepackage {
     mainClass = 'org.apache.fineract.ServerWithMariaDB4jApplication'
 }
 // This is to save json file at build time
-
-buildscript {
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath "io.swagger.core.v3:swagger-gradle-plugin:2.0.8"
-    }
-}
-
-apply plugin: "io.swagger.core.v3.swagger-gradle-plugin"
-
 resolve {
     outputFileName = 'fineractAPI'
     outputFormat = 'JSON'
@@ -563,20 +553,6 @@ resolve {
     outputPath = '/src/main/resources/'
 }
 // This is to generate swagger-ui
-
-buildscript {
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath "gradle.plugin.org.hidetake:gradle-swagger-generator-plugin:2.18.1"
-    }
-}
-
-apply plugin: "org.hidetake.swagger.generator"
-
 dependencies {
     swaggerUI 'org.webjars:swagger-ui:3.10.0'
 }
